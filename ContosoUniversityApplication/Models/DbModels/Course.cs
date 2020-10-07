@@ -8,7 +8,7 @@ namespace ContosoUniversityApplication.Models.DbModels
 {
     public class Course
     {
-        [Display(Name = "Number")]
+        [Display(Name = "Course Number")]
         public int Id { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
