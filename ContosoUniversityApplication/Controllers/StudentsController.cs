@@ -22,17 +22,30 @@ namespace ContosoUniversityApplication.Controllers
         // GET: Students
         /// <summary>
         /// Returns list of Students
-        /// Sort by LastName or EnrollementDate
-        /// Search by LastName or FirstName
+        /// Sort Students by LastName or EnrollmentDate
+        /// Filter(search) Students by FirstName or LastName
+        /// Display number of Students per page
         /// </summary>
         /// <param name="sortOrder"></param>
         /// <param name="searchString"></param>
+        /// <param name="currentFilter"></param>
+        /// <param name="pageNumber"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
             var students = from s in _context.Students
                            select s;
@@ -62,7 +75,9 @@ namespace ContosoUniversityApplication.Controllers
                     break;
             }
 
-            return View(await students.ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+
         }
 
         // GET: Students/Details/5
