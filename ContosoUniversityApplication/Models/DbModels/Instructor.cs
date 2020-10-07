@@ -7,32 +7,25 @@ using System.Threading.Tasks;
 
 namespace ContosoUniversityApplication.Models.DbModels
 {
-    public class Student
+    public class Instructor
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 2)]
-        [Column("LastName")]
         [Display(Name = "Last Name")]
+        [StringLength(50)]
         public string LastName { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 2)]
         [Column("FirstName")]
         [Display(Name = "First Name")]
+        [StringLength(50)]
         public string FirstName { get; set; }
 
-        [StringLength(50)]
-        [Column("MiddleName")]
-        [Display(Name = "Middle Name")]
-        public string MiddleName { get; set; }
-
-        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Enrollment Date")]
-        public DateTime EnrollmentDate { get; set; }
+        [Display(Name = "Hire Date")]
+        public DateTime HireDate { get; set; }
 
         [Display(Name = "Full Name")]
         public string FullName
@@ -40,6 +33,7 @@ namespace ContosoUniversityApplication.Models.DbModels
             get { return LastName + ", " + FirstName; }
         }
 
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        public OfficeAssignment OfficeAssignment { get; set; }
     }
 }
