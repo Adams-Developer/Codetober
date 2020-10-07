@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversityApplication.Data;
 using ContosoUniversityApplication.Models.DbModels;
+using ContosoUniversityApplication.Models.SchoolViewModels;
 
 namespace ContosoUniversityApplication.Controllers
 {
@@ -222,5 +223,6 @@ namespace ContosoUniversityApplication.Controllers
         {
             return _context.Students.Any(e => e.Id == id);
         }
+
     }
 }

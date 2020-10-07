@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ContosoUniversityApplication.Models;
+using ContosoUniversityApplication.Models.SchoolViewModels;
+using ContosoUniversityApplication.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoUniversityApplication.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly SchoolContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, SchoolContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -32,6 +37,26 @@ namespace ContosoUniversityApplication.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        // About Section
+        /// <summary>
+        /// Group the Student entities by EnrollmentDate
+        /// Calculate the number of entities in each group
+        /// Store the results in a collection
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> About()
+        {
+            IQueryable<EnrollmentDateGroup> data =
+                from student in _context.Students
+                group student by student.EnrollmentDate into dateGroup
+                select new EnrollmentDateGroup()
+                {
+                    EnrollmentDate = dateGroup.Key,
+                    StudentCount = dateGroup.Count()
+                };
+            return View(await data.ToListAsync());
         }
     }
 }
